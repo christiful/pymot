@@ -1,5 +1,11 @@
 # PyMOT
 
+## Update 
+Simply add an option for MOT-challenge txt format comparison.
+-m, --motchallenge whether or not use MOT-challenge txt format; Use sloth format otherwise
+-g Groundtruth
+-t Hypothesis
+
 ## Introduction
 The Multiple Object Tracking (MOT) metrics "multiple object tracking precision" (*MOTP*) and "multiple object tracking accuracy" (*MOTA*) allow for objective comparison of tracker characteristics [0].
 The *MOTP* shows the ability of the tracker to estimate precise object positions, independent of its skill at recognizing object configurations, keeping consistent trajectories, and so forth [0].

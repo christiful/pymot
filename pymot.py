@@ -9,6 +9,7 @@ from importers import MOT_hypo_import
 from importers import MOT_groundtruth_import
 from formatchecker import FormatChecker
 from utilities import write_stderr_red
+from motcha2sloth import parse_txt
 import logging
 LOG = logging.getLogger(__name__)
 
@@ -555,8 +556,9 @@ class MOTEvaluation:
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--groundtruth', required=True)
-    parser.add_argument('-b', '--hypothesis', required=True)
+    parser.add_argument('-g', '--groundtruth', required=True)
+    parser.add_argument('-t', '--hypothesis', required=True)
+    parser.add_argument('-m', '--motchallenge', default=True)
     parser.add_argument('-c', '--check_format', action="store_true", default=True)
     parser.add_argument('-v', '--visual_debug_file')
     parser.add_argument('-i', '--iou', default=0.2, type=float, help='iou threshold')
@@ -564,21 +566,28 @@ if __name__ == "__main__":
 
     # Load ground truth according to format
     # Assume MOT format, if non-json
-    gt = open(args.groundtruth) # gt file
-    if args.groundtruth.endswith(".json"):
+    if args.motchallenge:
+        groundtruth = parse_txt(args.groundtruth, gt = True)[0]
+    elif args.groundtruth.endswith(".json"):
+        gt = open(args.groundtruth) # gt file
         groundtruth = json.load(gt)[0]
+        gt.close()
     else:
+        gt = open(args.groundtruth) # gt file
         groundtruth = MOT_groundtruth_import(gt.readlines())
-    gt.close()
+        gt.close()
 
     # Load MOT format files
-    hypo = open(args.hypothesis) # hypo file
-    if args.hypothesis.endswith(".json"):
+    if args.motchallenge:
+        hypotheses = parse_txt(args.hypothesis)[0]
+    elif args.hypothesis.endswith(".json"):
+        hypo = open(args.hypothesis) # hypo file
         hypotheses = json.load(hypo)[0]
+        hypo.close()
     else:
+        hypo = open(args.hypothesis) # hypo file
         hypotheses = MOT_hypo_import(hypo.readlines())
-    hypo.close()
-
+        hypo.close()
 
     evaluator = MOTEvaluation(groundtruth, hypotheses, args.iou)
 
