@@ -7,6 +7,15 @@ Simply add an option for MOT-challenge txt format comparison.
 -g Groundtruth
 -t Hypothesis
 ```
+The format of MOT-challenge txt can be found in [MOT16 paper](https://arxiv.org/abs/1603.00831).
+
+The first number indicates in which frame the object appears, while the second number identifies that object as belonging to a trajectory by assigning a unique ID (set to −1 in a detection file, as no ID is assigned yet). Each object can be assigned to only one trajectory. The next four numbers indicate the position of the bounding box of the pedestrian in 2D image coordinates. The position is indicated by the top-left corner as well as width and height of the bounding box. This is followed by a single number, which in case of detections denotes their confidence score. The last two numbers for detection files are ignored (set to -1).
+An example of such a 2D detection file is:
+    1, -1, 794.2, 47.5, 71.2, 174.8, 67.5, -1, -1
+    1, -1, 164.1, 19.6, 66.5, 163.2, 29.4, -1, -1
+    1, -1, 875.4, 39.9, 25.3, 145.0, 19.6, -1, -1
+    2, -1, 781.7, 25.1, 69.2, 170.2, 58.1, -1, -1
+For the ground truth and results files, the 7th value (confidence score) acts as a flag whether the entry is to be considered. A value of 0 means that this particular instance is ignored in the evaluation, while a value of 1 is used to mark it as active. The 8th number indicates the type of object annotated, following the convention of
 
 ## Introduction
 The Multiple Object Tracking (MOT) metrics "multiple object tracking precision" (*MOTP*) and "multiple object tracking accuracy" (*MOTA*) allow for objective comparison of tracker characteristics [0].
